@@ -1,0 +1,3 @@
+mv Tex/test_file.tex /tmp/
+rm Tex/*
+mv /tmp/test_file.tex Tex/ 
