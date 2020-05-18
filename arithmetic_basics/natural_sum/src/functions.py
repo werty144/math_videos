@@ -40,20 +40,20 @@ def my_title(text, **kwargs):
 
 
 def get_move_group_animation(group, vector):
-    animations = [MoveAlongPath(elem, ParametricFunction(
-        lambda t: t * vector + np.array([elem.get_x(), elem.get_y(), elem.get_z()])))
-                  for elem in group.submobjects]
-    return animations
+    animation = MoveAlongPath(group, ParametricFunction(
+        lambda t: t * vector + group.get_center()))
+
+    return animation
 
 
 def get_coords(mobject: Mobject):
     return np.array([mobject.get_x(), mobject.get_y(), mobject.get_z()])
 
 
-def line_up_text_mobjects(*text_mobjects: TextMobject, distance=1):
+def line_up_text_mobjects(*text_mobjects: TextMobject, distance=0.1):
     fixed = 'acemnorsuvwxz'
     bottom_fixed = 'abcdefhiklmnorstuvwxz'
-    descender_fixed = 'gpqyj'
+    descender_fixed = 'gpqyj,'
     mid_fixed = ['+', '-', '=', '(', ')', '\\cdot']
 
     fixed_height = TextMobject('a').get_height()
@@ -78,4 +78,14 @@ def line_up_text_mobjects(*text_mobjects: TextMobject, distance=1):
         m.shift(RIGHT * (right_edge + m.get_width() * 0.5 + distance))
         right_edge += m.get_width() + distance
 
-    return Group(*text_mobjects)
+    group = Group(*text_mobjects)
+    group.center()
+    return group
+
+
+def make_screen_frame(scene, **kwargs):
+    screen_frame = Rectangle()
+    screen_frame.stretch_to_fit_width(FRAME_WIDTH)
+    screen_frame.stretch_to_fit_height(FRAME_HEIGHT)
+    screen_frame.set_stroke(width=DEFAULT_STROKE_WIDTH)
+    scene.add(screen_frame)

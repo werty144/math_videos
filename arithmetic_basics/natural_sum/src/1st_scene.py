@@ -3,7 +3,7 @@ from manimlib.imports import *
 from src.functions import draw_reference, my_title
 
 
-class Intro(Scene):
+class Scene1(Scene):
     def construct(self):
         title = my_title('Натуральные числа', color=BLUE, height=1)
         self.play(Write(title))

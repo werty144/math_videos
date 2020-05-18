@@ -20,7 +20,7 @@ def get_two_cubes():
     return Group(cube4, cube5)
 
 
-class Addition(SpecialThreeDScene):
+class Scene2(SpecialThreeDScene):
     def construct(self):
         self.set_camera_orientation(phi=-PI * 5 / 3)
 
@@ -36,4 +36,4 @@ class Addition(SpecialThreeDScene):
 
         move_three = get_move_group_animation(three_cubes, LEFT)
         move_two = get_move_group_animation(two_cubes, RIGHT)
-        self.play(*move_two, *move_three)
+        self.play(move_two, move_three)
