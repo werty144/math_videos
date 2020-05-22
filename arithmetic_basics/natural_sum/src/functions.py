@@ -5,7 +5,7 @@ from manimlib.mobject.functions import ParametricFunction
 
 
 def text_fit_to_box(text, box: Rectangle):
-    lines_n = len(text.splitlines())
+    lines_n = len(text.split('\\\\'))
     text_obj = TextMobject(text, height=lines_n * 0.4)
     box.set_width(text_obj.get_width() + 0.2)
     text_obj.center()
@@ -89,3 +89,43 @@ def make_screen_frame(scene, **kwargs):
     screen_frame.stretch_to_fit_height(FRAME_HEIGHT)
     screen_frame.set_stroke(width=DEFAULT_STROKE_WIDTH)
     scene.add(screen_frame)
+
+
+drawing_defaults = {
+    'stroke_color': DARK_BLUE,
+    'stroke_width': DEFAULT_STROKE_WIDTH / 2,
+    'fill_opacity': 0.75
+}
+
+
+class Pyramid(VGroup):
+    CONFIG = {
+        "fill_opacity": 0.75,
+        "fill_color": BLUE,
+        "stroke_width": DEFAULT_STROKE_WIDTH,
+        "side_length": 2,
+    }
+
+    def __init__(self, n=4, **kwargs):
+        self.base_vertices_n = n
+        self.outer_radius = 1/(2 * math.sin(PI / n))
+        self.height = 1.5
+        super().__init__(**kwargs)
+
+    def generate_points(self):
+        base = RegularPolygon(self.base_vertices_n, shade_in_3d=True)
+        base.rotate(PI / 2, X_AXIS)
+        top = np.array([0, self.height, 0])
+        base_points = base.get_vertices().tolist()
+        for i, v in enumerate(base_points):
+            self.add((Polygon(v, base_points[(i + 1) % self.base_vertices_n], top, shade_in_3d=True)))
+
+
+def get_center_should(what, onto_what):
+    center_should = onto_what.get_center() + UP * onto_what.get_height() / 2 + UP * what.get_height() / 2
+    return center_should
+
+
+def put_onto_animation(what, onto_what):
+    center_should = get_center_should(what, onto_what)
+    return get_move_group_animation(what, center_should - what.get_center())

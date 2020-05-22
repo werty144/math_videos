@@ -73,4 +73,7 @@ class Scene4(Scene):
         eq = eq1.copy()
         self.add(eq)
         self.remove(eq1, eq3)
+        draw_reference(self, 'Свойство функции\\\\'
+                             '$f(x, y) = f(y, x)$\\\\'
+                             'называется \\underline{коммутативность}')
         self.wait(1)
