@@ -40,47 +40,15 @@ def my_title(text, **kwargs):
 
 
 def get_move_group_animation(group, vector):
+    group_center = group.get_center()
     animation = MoveAlongPath(group, ParametricFunction(
-        lambda t: t * vector + group.get_center()))
+        lambda t: t * vector + group_center))
 
     return animation
 
 
 def get_coords(mobject: Mobject):
     return np.array([mobject.get_x(), mobject.get_y(), mobject.get_z()])
-
-
-def line_up_text_mobjects(*text_mobjects: TextMobject, distance=0.1):
-    fixed = 'acemnorsuvwxz'
-    bottom_fixed = 'abcdefhiklmnorstuvwxz'
-    descender_fixed = 'gpqyj,'
-    mid_fixed = ['+', '-', '=', '(', ')', '\\cdot']
-
-    fixed_height = TextMobject('a').get_height()
-    descender_level = fixed_height - TextMobject('g').get_height()
-    cap_height = TextMobject('A').get_height()
-
-    for text_mobject in text_mobjects:
-        tex_string = text_mobject.get_tex_string()
-        if tex_string[0] in bottom_fixed:
-            text_mobject.shift(UP * (0 - text_mobject.get_bottom()[1]))
-        if tex_string[0] in descender_fixed:
-            text_mobject.shift(UP * (descender_level - text_mobject.get_bottom()[1]))
-        if tex_string[0] in mid_fixed:
-            text_mobject.set_y(fixed_height * 0.5)
-        if tex_string[0].isupper():
-            text_mobject.shift(UP * (cap_height - text_mobject.get_top()[1]))
-        if tex_string[0] == '\\':
-            raise Exception('not implemented')
-
-    right_edge = 0
-    for i, m in enumerate(text_mobjects):
-        m.shift(RIGHT * (right_edge + m.get_width() * 0.5 + distance))
-        right_edge += m.get_width() + distance
-
-    group = Group(*text_mobjects)
-    group.center()
-    return group
 
 
 def make_screen_frame(scene, **kwargs):
