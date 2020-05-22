@@ -88,7 +88,7 @@ def make_screen_frame(scene, **kwargs):
     screen_frame.stretch_to_fit_width(FRAME_WIDTH)
     screen_frame.stretch_to_fit_height(FRAME_HEIGHT)
     screen_frame.set_stroke(width=DEFAULT_STROKE_WIDTH)
-    scene.add(screen_frame)
+    scene.add_fixed_orientation_mobjects(screen_frame)
 
 
 drawing_defaults = {
@@ -107,25 +107,38 @@ class Pyramid(VGroup):
     }
 
     def __init__(self, n=4, **kwargs):
+        digest_config(self, kwargs)
         self.base_vertices_n = n
-        self.outer_radius = 1/(2 * math.sin(PI / n))
-        self.height = 1.5
+        self.outer_radius = self.side_length / (2 * math.sin(PI / n))
+        self.height = self.side_length
         super().__init__(**kwargs)
 
     def generate_points(self):
-        base = RegularPolygon(self.base_vertices_n, shade_in_3d=True)
+        # base = RegularPolygon(self.base_vertices_n, shade_in_3d=True)
+        start_vect = RIGHT * self.outer_radius
+        vertices = compass_directions(self.base_vertices_n, start_vect)
+        base = Polygon(*vertices, shade_in_3d=True)
         base.rotate(PI / 2, X_AXIS)
+        self.add(base)
         top = np.array([0, self.height, 0])
         base_points = base.get_vertices().tolist()
         for i, v in enumerate(base_points):
             self.add((Polygon(v, base_points[(i + 1) % self.base_vertices_n], top, shade_in_3d=True)))
 
 
-def get_center_should(what, onto_what):
+def get_onto_center_should(what, onto_what):
     center_should = onto_what.get_center() + UP * onto_what.get_height() / 2 + UP * what.get_height() / 2
     return center_should
 
 
-def put_onto_animation(what, onto_what):
-    center_should = get_center_should(what, onto_what)
-    return get_move_group_animation(what, center_should - what.get_center())
+def put_onto_animation(what, center_should):
+    dif_vec = center_should - what.get_center()
+    mid_point = what.get_center() + dif_vec * 0.5 + UP * dif_vec[1] * 2
+    return MoveAlongPath(what, ParametricFunction(bezier([what.get_center(), mid_point, center_should])))
+
+
+def move_to_border_and_scale_animation(group, direction, scale_factor):
+    return AnimationGroup(ScaleInPlace(group, scale_factor),
+                          get_move_group_animation(group,
+                                                   group.copy().scale(scale_factor).align_on_border(
+                                                       direction).get_center() - group.get_center()))
