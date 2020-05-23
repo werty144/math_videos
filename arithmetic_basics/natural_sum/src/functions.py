@@ -56,7 +56,10 @@ def make_screen_frame(scene, **kwargs):
     screen_frame.stretch_to_fit_width(FRAME_WIDTH)
     screen_frame.stretch_to_fit_height(FRAME_HEIGHT)
     screen_frame.set_stroke(width=DEFAULT_STROKE_WIDTH)
-    scene.add_fixed_orientation_mobjects(screen_frame)
+    if isinstance(scene, SpecialThreeDScene):
+        scene.add_fixed_orientation_mobjects(screen_frame)
+    else:
+        scene.add(screen_frame)
 
 
 drawing_defaults = {
@@ -110,3 +113,6 @@ def move_to_border_and_scale_animation(group, direction, scale_factor):
                           get_move_group_animation(group,
                                                    group.copy().scale(scale_factor).align_on_border(
                                                        direction).get_center() - group.get_center()))
+
+
+space_width = 0.2515478499999987

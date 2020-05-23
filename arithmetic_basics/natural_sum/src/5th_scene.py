@@ -2,7 +2,6 @@ from src.functions import *
 
 
 def create_put_onto_equation(scene, type1, type2, type1_color, type2_color):
-    make_screen_frame(scene)
     scene.set_camera_orientation(phi=-PI / 10)
     put_on_func = TextMobject('$putOnto$', '(', '\\quad', ',', '\\quad', ')', '$=$', arg_separator='')
     scene.camera.add_fixed_orientation_mobjects(put_on_func)
