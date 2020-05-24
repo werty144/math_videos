@@ -197,3 +197,8 @@ def substitution_animation(var_ind, subst, text: TextMobject, scene):
     text.submobjects[var_ind] = subst_text
     scene.remove(var)
     return FadeInFrom(subst_text, UP), FadeOutAndShiftDown(var)
+
+
+def get_together_animation(group1, group2):
+    diff = group2.get_left()[0] - group1.get_right()[0]
+    return get_move_group_animation(group1, RIGHT * diff/4), get_move_group_animation(group2, LEFT * diff/4)
