@@ -108,7 +108,7 @@ def put_onto_animation(what, center_should):
     return MoveAlongPath(what, ParametricFunction(bezier([what.get_center(), mid_point, center_should])))
 
 
-def move_to_border_and_scale_animation(group, direction, scale_factor):
+def move_to_border_and_scale_animation(group, direction, scale_factor=1):
     return AnimationGroup(ScaleInPlace(group, scale_factor),
                           get_move_group_animation(group,
                                                    group.copy().scale(scale_factor).align_on_border(
@@ -120,12 +120,10 @@ space_width = 0.2515478499999987
 
 def overscribe_text(text_mobject, overrscript):
     over_text = TextMobject(overrscript)
-    over_text.set_height(text_mobject.get_height() * 0.7)
+    over_text.set_height(max(text_mobject.get_height() * 0.7, 0.3))
     shift = text_mobject.get_top() - over_text.get_bottom() + UP * 0.15
     over_text.shift(shift)
     return over_text
-
-
 
 
 def swap_variables_animation(v1, v2):
@@ -183,3 +181,19 @@ def move_brackets_animation(lbr_ind, rbr_ind, left_end, right_end, text_mobject)
                   (text[i], new_text_mobject.submobjects[indices_map[i]].get_center() - text[i].get_center())
                   for i in range(len(text))]
     return animations
+
+
+def substitution_animation(var_ind, subst, text: TextMobject, scene):
+    var = text.submobjects[var_ind]
+    subst_text = TextMobject(subst)
+    subst_text.set_color_by_tex_to_color_map({subst: var.get_color()})
+    # subst_text.set_width(var.get_width())
+    new_text = [obj.get_tex_string() for obj in text.submobjects]
+    new_text[var_ind] = subst
+    new_mobj = TextMobject(*new_text, arg_separator='')
+    new_mobj.shift(text.get_left() - new_mobj.get_left())
+    new_center = new_mobj.submobjects[var_ind].get_center()
+    subst_text.shift(new_center - subst_text.get_center())
+    text.submobjects[var_ind] = subst_text
+    scene.remove(var)
+    return FadeInFrom(subst_text, UP), FadeOutAndShiftDown(var)
