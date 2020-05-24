@@ -116,3 +116,70 @@ def move_to_border_and_scale_animation(group, direction, scale_factor):
 
 
 space_width = 0.2515478499999987
+
+
+def overscribe_text(text_mobject, overrscript):
+    over_text = TextMobject(overrscript)
+    over_text.set_height(text_mobject.get_height() * 0.7)
+    shift = text_mobject.get_top() - over_text.get_bottom() + UP * 0.15
+    over_text.shift(shift)
+    return over_text
+
+
+
+
+def swap_variables_animation(v1, v2):
+    diff_vector = RIGHT * (v2.get_center()[0] - v1.get_center()[0])
+    v1_movement = MoveAlongPath(v1, ParametricFunction(
+        lambda t: clockwise_path()(v1.get_center(), v1.get_center() + diff_vector, t)))
+    v2_movement = MoveAlongPath(v2, ParametricFunction(
+        lambda t: clockwise_path()(v2.get_center(), v2.get_center() - diff_vector, t)))
+    return v1_movement, v2_movement
+
+
+def update_indices_map(from_pos, to_pos, indices_map):
+    if from_pos > to_pos:
+        for key, value in indices_map.items():
+            if to_pos <= value < from_pos:
+                indices_map[key] += 1
+            if value == from_pos:
+                indices_map[key] = to_pos
+    if from_pos < to_pos:
+        for key, value in indices_map.items():
+            if from_pos < value <= to_pos:
+                indices_map[key] -= 1
+            if value == from_pos:
+                indices_map[key] = to_pos
+
+
+def inverse_dict(my_dict):
+    result_dict = {}
+    for key, value in my_dict.items():
+        result_dict[value] = key
+    return result_dict
+
+
+def move_brackets_animation(lbr_ind, rbr_ind, left_end, right_end, text_mobject):
+    text = text_mobject.submobjects
+    indices_map = {}
+    for i in range(len(text)):
+        indices_map[i] = i
+
+    if lbr_ind > left_end:
+        update_indices_map(lbr_ind, left_end, indices_map)
+    else:
+        update_indices_map(lbr_ind, left_end - 1, indices_map)
+
+    new_rbr_ind = indices_map[rbr_ind]
+    new_right_end = indices_map[right_end]
+    if new_rbr_ind > new_right_end:
+        update_indices_map(new_rbr_ind, new_right_end + 1, indices_map)
+    else:
+        update_indices_map(new_rbr_ind, new_right_end, indices_map)
+
+    new_text = [text[inverse_dict(indices_map)[i]].get_tex_string() for i in range(len(text))]
+    new_text_mobject = TextMobject(*new_text, arg_separator='')
+    animations = [get_move_group_animation
+                  (text[i], new_text_mobject.submobjects[indices_map[i]].get_center() - text[i].get_center())
+                  for i in range(len(text))]
+    return animations

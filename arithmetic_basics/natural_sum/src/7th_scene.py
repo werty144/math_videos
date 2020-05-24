@@ -36,7 +36,13 @@ class Scene7(SpecialThreeDScene):
         self.play(get_move_group_animation(two_cubes, RIGHT), get_move_group_animation(three_cubes, LEFT))
         make_ellipse(self)
         self.play(get_move_group_animation(two_cubes, LEFT), get_move_group_animation(three_cubes, RIGHT))
-        self.move_camera(theta=PI/2)
+        self.move_camera(theta=PI/2, run_time=2)
         self.play(get_move_group_animation(two_cubes, RIGHT), get_move_group_animation(three_cubes, LEFT))
         make_ellipse(self)
 
+        def rotate_updater(mobject: Mobject, dt, rate=0.05):
+            return mobject.rotate_in_place(rate * PI * dt, Z_AXIS)
+
+        for cube in two_cubes.submobjects + three_cubes.submobjects:
+            cube.add_updater(rotate_updater)
+        self.wait(3)
