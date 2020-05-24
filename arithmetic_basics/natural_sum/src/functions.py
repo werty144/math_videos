@@ -177,6 +177,7 @@ def move_brackets_animation(lbr_ind, rbr_ind, left_end, right_end, text_mobject)
 
     new_text = [text[inverse_dict(indices_map)[i]].get_tex_string() for i in range(len(text))]
     new_text_mobject = TextMobject(*new_text, arg_separator='')
+    new_text_mobject.shift(text_mobject.get_left() - new_text_mobject.get_left())
     animations = [get_move_group_animation
                   (text[i], new_text_mobject.submobjects[indices_map[i]].get_center() - text[i].get_center())
                   for i in range(len(text))]
