@@ -3,6 +3,7 @@ from src.functions import *
 
 class Scene12(Scene):
     def construct(self):
+        self.camera.background_color = RED
         statement = TextMobject('$a$', ' $+$ ', '$b$', ' $+$ ', '$c$', ' $=$ ',  '$b$', ' $+$ ', '$c$', ' $+$ ', '$a$',
                                 arg_separator='')
         statement.set_color_by_tex_to_color_map({'a': RED, 'b': GREEN, 'c': BLUE})

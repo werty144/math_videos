@@ -7,24 +7,29 @@ from manimlib.mobject.functions import ParametricFunction
 def text_fit_to_box(text, box: Rectangle):
     lines_n = len(text.split('\\\\'))
     text_obj = TextMobject(text, height=lines_n * 0.4)
-    box.set_width(text_obj.get_width() + 0.2)
+    text_obj.set_color_by_tex(text, BLACK)
+    box.stretch_to_fit_width(text_obj.get_width() + 0.2)
+    box.stretch_to_fit_height(text_obj.get_height() + 0.4)
     text_obj.center()
     box.center()
     return text_obj
 
 
-def draw_reference(scene, text):
-    margin_right = 0.3
-    margin_bot = 0.3
+def draw_reference(scene: Scene, text):
     box = Rectangle()
-    box.set_stroke(color=RED)
+    box.set_stroke(width=DEFAULT_STROKE_WIDTH * 2, color="#2f4f4f").set_fill(color=WHITE, opacity=1)
     text_obj = text_fit_to_box(text, box)
+    leg = Rectangle().stretch_to_fit_width(0.3).stretch_to_fit_height(1).set_fill(color="#a0522d", opacity=1).\
+        set_stroke(width=0)
     group = Group(box, text_obj)
-    group.shift(np.array([FRAME_X_RADIUS - margin_right - box.get_width() * 0.5,
-                          -FRAME_Y_RADIUS + margin_bot + box.get_height() * 0.5, 0]))
+    group.align_on_border(DR)
+    leg.shift(box.get_bottom() - leg.get_top())
+    scene.bring_to_back(box)
+    group = Group(box, text_obj, leg)
 
-    scene.play(Write(text_obj, run_time=0))
-    scene.play(DrawBorderThenFill(box, stroke_width=DEFAULT_STROKE_WIDTH))
+    scene.play(FadeInFromDown(group))
+    scene.wait(3)
+    scene.play(FadeOutAndShiftDown(group))
 
 
 def my_title(text, **kwargs):
