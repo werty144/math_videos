@@ -3,6 +3,17 @@ from src.functions import *
 
 class Scene11(Scene):
     def construct(self):
+        statement = TextMobject('(', '(', '$a$', ' $+$ ', '$b$', ')', ' $+$ ', '$c$', ')', ' $+$ ', '$d$', ' ', '$=$ ',
+                                '$a$', ' $+$ ', '(', '(', '$b$', ' $+$ ', '$c$', ')', ' $+$ ', '$d$', ')',
+                                arg_separator='')
+        statement.set_color_by_tex_to_color_map({'a': RED, 'b': GREEN, 'c': BLUE, 'd': ORANGE})
+        statement.set_color_by_tex_to_color_map({'a': RED, 'b': GREEN, 'c': BLUE})
+        statement.scale(1.2)
+        statement.align_on_border(UP)
+        q_mark = overscribe_text(statement.submobjects[12], '?')
+        self.play(FadeIn(statement))
+        self.play(FadeIn(q_mark))
+
         equation1 = TextMobject('(', '(', '$a$', ' $+$ ', '$b$', ')', ' $+$ ', '$c$', ')', ' $+$ ', '$d$', ' ', '$=$',
                                 arg_separator='')
         equation1.set_color_by_tex_to_color_map({'a': RED, 'b': GREEN, 'c': BLUE, 'd': ORANGE})
@@ -38,4 +49,10 @@ class Scene11(Scene):
                   FadeOut(equation3),
                   FadeOut(equation2),
                   FadeOut(eq))
+
+        tick = TextMobject('\\checkmark')
+        tick.set_color_by_tex('checkmark', GREEN)
+        tick.set_height(q_mark.get_height())
+        tick.shift(q_mark.get_bottom() - tick.get_bottom())
+        self.play(ReplacementTransform(q_mark, tick))
         self.wait(2)

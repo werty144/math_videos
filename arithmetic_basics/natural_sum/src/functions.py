@@ -120,18 +120,28 @@ space_width = 0.2515478499999987
 
 def overscribe_text(text_mobject, overrscript):
     over_text = TextMobject(overrscript)
-    over_text.set_height(max(text_mobject.get_height() * 0.7, 0.3))
+    over_text.set_height(0.3)
     shift = text_mobject.get_top() - over_text.get_bottom() + UP * 0.15
     over_text.shift(shift)
     return over_text
 
 
-def swap_variables_animation(v1, v2):
-    diff_vector = RIGHT * (v2.get_center()[0] - v1.get_center()[0])
+def swap_variables_animation(v1_ind, v2_ind, text_mobject: TextMobject):
+    v1 = text_mobject.submobjects[v1_ind]
+    v2 = text_mobject.submobjects[v2_ind]
+    v1_text = text_mobject.submobjects[v1_ind].get_tex_string()
+    v2_text = text_mobject.submobjects[v2_ind].get_tex_string()
+    new_text = [obj.get_tex_string() for obj in text_mobject.submobjects]
+    new_text[v1_ind] = v2_text
+    new_text[v2_ind] = v1_text
+    new_text_mobject = TextMobject(*new_text, arg_separator='')
+    new_text_mobject.shift(text_mobject.get_left() - new_text_mobject.get_left())
+    new_v1_center = new_text_mobject.submobjects[v2_ind].get_center()
+    new_v2_center = new_text_mobject.submobjects[v1_ind].get_center()
     v1_movement = MoveAlongPath(v1, ParametricFunction(
-        lambda t: clockwise_path()(v1.get_center(), v1.get_center() + diff_vector, t)))
+        lambda t: clockwise_path()(v1.get_center(), new_v1_center, t)))
     v2_movement = MoveAlongPath(v2, ParametricFunction(
-        lambda t: clockwise_path()(v2.get_center(), v2.get_center() - diff_vector, t)))
+        lambda t: clockwise_path()(v2.get_center(), new_v2_center, t)))
     return v1_movement, v2_movement
 
 
