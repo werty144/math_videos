@@ -19,7 +19,7 @@ def draw_reference(scene: Scene, text):
     box = Rectangle()
     box.set_stroke(width=DEFAULT_STROKE_WIDTH * 2, color="#2f4f4f").set_fill(color=WHITE, opacity=1)
     text_obj = text_fit_to_box(text, box)
-    leg = Rectangle().stretch_to_fit_width(0.3).stretch_to_fit_height(1).set_fill(color="#a0522d", opacity=1).\
+    leg = Rectangle().stretch_to_fit_width(0.3).stretch_to_fit_height(1).set_fill(color="#a0522d", opacity=1). \
         set_stroke(width=0)
     group = Group(box, text_obj)
     group.align_on_border(DR)
@@ -217,4 +217,21 @@ def substitution_animation(var_ind, subst, text: TextMobject, scene):
 
 def get_together_animation(group1, group2):
     diff = group2.get_left()[0] - group1.get_right()[0]
-    return get_move_group_animation(group1, RIGHT * diff/4), get_move_group_animation(group2, LEFT * diff/4)
+    return get_move_group_animation(group1, RIGHT * diff / 4), get_move_group_animation(group2, LEFT * diff / 4)
+
+
+class My_bullet_list(Mobject):
+    def __init__(self, n):
+        Mobject.__init__(self)
+        for _ in range(n):
+            dot = TexMobject("\\cdot").scale(2)
+            self.add(dot)
+        dot_group = Group(*self.submobjects)
+        dot_group.arrange(
+            DOWN,
+            aligned_edge=LEFT,
+            buff=LARGE_BUFF
+        )
+
+    def fade_in_dot_animation(self, dot_ind):
+        return FadeIn(self.submobjects[dot_ind])
