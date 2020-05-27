@@ -8,8 +8,10 @@ class Scene9(Scene):
         assos.set_color_by_tex_to_color_map({'x': RED, 'y': BLUE, 'z': GREEN})
         eq = assos.submobjects[9]
         q_mark = overscribe_text(eq, '?')
-        self.play(Write(assos))
+        self.wait(3)
+        self.play(Write(assos), run_time=2)
         self.play(FadeIn(q_mark))
+        self.wait(5)
         sum_n_sq_func = TextMobject('$f($', '$x$', ', ', '$y$', ')', ' $=$ ', '(', '$x$', ' $+$ ', '$y$', '$)^2$', arg_separator='')
         sum_n_sq = TextMobject('(', '$x$', ' $+$ ', '$y$', '$)^2$', arg_separator='')
         sum_n_sq.set_color_by_tex_to_color_map({'x': RED, 'y': BLUE, 'z': GREEN})
@@ -17,6 +19,10 @@ class Scene9(Scene):
         sum_n_sq_func.scale(1.3)
         sum_n_sq_func.align_on_border(UP)
         self.play(FadeIn(sum_n_sq_func))
+
+        # time passed 12
+
+        self.wait(4)
 
         left_inner = Group(*assos.submobjects[1:6])
         sum_n_sq_for_left_inner = sum_n_sq.copy()
@@ -28,6 +34,7 @@ class Scene9(Scene):
         sum_n_sq_for_right_inner.shift(right_inner.get_center()).set_width(right_inner.get_width())
 
         self.play(ReplacementTransform(left_inner, sum_n_sq_for_left_inner), ReplacementTransform(right_inner, sum_n_sq_for_right_inner))
+        self.wait(1)
 
         left_outer = TextMobject('(', '(', '$x$', ' $+$ ', '$y$', '$)^2$', ' $+$ ', '$z$', '$)^2$', arg_separator='')
         left_outer.set_color_by_tex_to_color_map({'x': RED, 'y': BLUE, 'z': GREEN})
@@ -41,6 +48,11 @@ class Scene9(Scene):
 
         self.play(ReplacementTransform(Group(*assos.submobjects[0:9]), left_outer),
                   ReplacementTransform(Group(*assos.submobjects[10:19]), right_outer))
+        self.wait(1)
+
+        # time passed 20
+
+        self.wait(5)
 
         self.play(*substitution_animation(2, '1', left_outer, self),
                   *substitution_animation(4, '2', left_outer, self),
@@ -48,6 +60,8 @@ class Scene9(Scene):
                   *substitution_animation(1, '1', right_outer, self),
                   *substitution_animation(4, '2', right_outer, self),
                   *substitution_animation(6, '3', right_outer, self))
+
+        self.wait(1)
 
         left_val = TextMobject('144')
         right_val = TextMobject('676')
@@ -59,7 +73,8 @@ class Scene9(Scene):
         self.play(ReplacementTransform(right_outer, right_val),
                   ReplacementTransform(left_outer, left_val),
                   ReplacementTransform(eq, neq),
-                  FadeOut(q_mark)
+                  FadeOut(q_mark),
+                  run_time=2
                   )
 
         self.wait(2)

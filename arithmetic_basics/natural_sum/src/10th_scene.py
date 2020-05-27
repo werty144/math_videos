@@ -29,8 +29,7 @@ def make_ellipse(scene, center=ORIGIN, width=11, height=4):
 
 class Scene10(SpecialThreeDScene):
     def construct(self):
-        make_screen_frame(self)
-        self.set_camera_orientation(phi=PI/3)
+        self.set_camera_orientation(phi=PI * 5 / 12)
         giant_lbr = TextMobject('(').set_height(3)
         giant_rbr = TextMobject(')').set_height(3)
         self.camera.add_fixed_orientation_mobjects(giant_rbr, giant_lbr)
@@ -44,14 +43,15 @@ class Scene10(SpecialThreeDScene):
         cubes2_center = cubes2.get_center()
         cubes3_center = cubes3.get_center()
         self.play(FadeIn(cube_group))
+        self.wait(2)
 
         giant_lbr.shift(cube1.get_left() - giant_lbr.get_right())
         giant_rbr.shift(cubes2.get_right() - giant_rbr.get_left())
         left_prior = TextMobject('(', '$x$', ' $+$ ', '$y$', ')', ' $+$ ', '$z$', arg_separator='')
-        self.camera.add_fixed_orientation_mobjects(left_prior)
+        self.add_fixed_in_frame_mobjects(left_prior)
         left_prior.set_color_by_tex_to_color_map({'x': RED, 'y': BLUE, 'z': GREEN})
         left_prior.scale(1.3)
-        left_prior.shift(UP * 8)
+        left_prior.align_on_border(UP)
         self.play(FadeIn(left_prior))
         self.play(FadeIn(giant_lbr), FadeIn(giant_rbr))
         self.play(*get_together_animation(cube1, cubes2))
@@ -61,17 +61,14 @@ class Scene10(SpecialThreeDScene):
         self.play(get_move_group_animation(cube1, cube1_center - cube1.get_center()),
                   get_move_group_animation(cubes2, cubes2_center - cubes2.get_center()),
                   get_move_group_animation(cubes3, cubes3_center - cubes3.get_center()),
-                  FadeOut(left_prior)
                   )
+
+        self.wait(1)
+        self.play(*move_brackets_animation(0, 4, 3, 6, left_prior, 1.3))
+        self.wait(1)
 
         giant_lbr.shift(cubes2.get_left() - giant_lbr.get_right())
         giant_rbr.shift(cubes3.get_right() - giant_rbr.get_left())
-        right_prior = TextMobject('$x$', ' $+$ ', '(', '$y$', ' $+$ ', '$z$', ')', arg_separator='')
-        self.camera.add_fixed_orientation_mobjects(right_prior)
-        right_prior.set_color_by_tex_to_color_map({'x': RED, 'y': BLUE, 'z': GREEN})
-        right_prior.scale(1.3)
-        right_prior.shift(UP * 8)
-        self.play(FadeIn(right_prior))
         self.play(FadeIn(giant_lbr), FadeIn(giant_rbr))
         self.play(*get_together_animation(cubes2, cubes3))
         self.play(FadeOut(giant_rbr), FadeOut(giant_lbr))
@@ -80,6 +77,14 @@ class Scene10(SpecialThreeDScene):
         self.play(get_move_group_animation(cube1, cube1_center - cube1.get_center()),
                   get_move_group_animation(cubes2, cubes2_center - cubes2.get_center()),
                   get_move_group_animation(cubes3, cubes3_center - cubes3.get_center()),
-                  FadeOut(right_prior)
+                  FadeOut(left_prior)
                   )
-        self.wait(2)
+
+        def rotate_updater(mobject: Mobject, dt, rate=0.05):
+            return mobject.rotate_in_place(rate * PI * dt, Z_AXIS)
+
+        cube1.add_updater(rotate_updater)
+        cubes2.add_updater(rotate_updater)
+        cubes3.add_updater(rotate_updater)
+
+        self.wait(17.5)

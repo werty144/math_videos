@@ -7,7 +7,9 @@ class Scene8(Scene):
                                arg_separator='')
         plus_fun.set_color_by_tex_to_color_map({'x': RED, 'y': BLUE, 'z': GREEN})
         self.play(FadeIn(plus_fun))
+        self.wait(2)
         self.play(*move_brackets_animation(8, 12, 11, 14, plus_fun))
+        self.wait(2)
         plus1 = plus_fun.get_parts_by_tex('+')[0]
         plus2 = plus_fun.get_parts_by_tex('+')[1]
         plus3 = plus_fun.get_parts_by_tex('+')[2]

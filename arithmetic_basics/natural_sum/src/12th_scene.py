@@ -21,35 +21,44 @@ class Scene12(Scene):
         part3 = TextMobject('(', '$b$', ' $+$ ', '$a$', ')', ' $+$ ', '$c$', arg_separator='')
         part3.set_color_by_tex_to_color_map({'a': RED, 'b': GREEN, 'c': BLUE})
         part3.shift(part2.get_right() - part3.get_left() + RIGHT * space_width)
-        group1 = Group(part1, part2, part3).center()
+        group1 = Group(part1, part2, part3).center().shift(DOWN * statement.get_height()/2)
         self.play(FadeIn(Group(*part1.submobjects[:-1])))
         self.play(FadeIn(part1.submobjects[-1]), FadeIn(Group(*part2.submobjects[:-1])))
+        self.wait(0.5)
         self.play(*swap_variables_animation(1, 3, part2))
+        self.wait(0.5)
         self.play(FadeIn(part2.submobjects[-1]), FadeIn(part3))
+        self.wait(0.5)
         self.play(*move_brackets_animation(0, 4, 3, 6, part3))
+        self.wait(0.5)
 
-        eq = TextMobject('$=$')
-        eq.shift(part3.get_right() - eq.get_left(), RIGHT * space_width)
         part4 = TextMobject('$=$ ', '$b$', ' $+$ ', '(', '$a$',  ' $+$ ', '$c$', ')', arg_separator='')
         part4.set_color_by_tex_to_color_map({'a': RED, 'b': GREEN, 'c': BLUE})
         part4.shift(part1.get_left() - part4.get_left(), DOWN * 0.5)
         self.play(
             get_move_group_animation(group1, UP * 0.5),
         )
+        eq = TextMobject('$=$')
+        eq.shift(part3.get_right() - eq.get_left(), RIGHT * space_width)
         self.play(FadeIn(part4), FadeIn(eq))
+        self.wait(1.5)
         self.play(*swap_variables_animation(4, 6, part4))
+        self.wait(0.5)
 
         part5 = TextMobject('$=$ ', '$b$', ' $+$ ', '(', '$c$', ' $+$ ', '$a$', ')', arg_separator='')
         part5.set_color_by_tex_to_color_map({'a': RED, 'b': GREEN, 'c': BLUE})
         part5.shift(part4.get_right() - part5.get_left(), RIGHT * space_width)
         part5.shift(DOWN * (part5.submobjects[1].get_bottom()[1] - part4.submobjects[1].get_bottom()[1]))
         self.play(FadeIn(part5))
+        self.wait(0.5)
         self.play(*move_brackets_animation(3, 7, 1, 4, part5))
+        self.wait(0.5)
 
         part6 = TextMobject('$=$ ', '$b$', ' $+$ ', '$c$', ' $+$ ', '$a$', arg_separator='')
         part6.set_color_by_tex_to_color_map({'a': RED, 'b': GREEN, 'c': BLUE})
         part6.shift(part5.get_right() - part6.get_left(), RIGHT * space_width)
         self.play(FadeIn(part6))
+        self.wait(0.5)
 
         tick = TextMobject('\\checkmark')
         tick.set_color_by_tex('checkmark', GREEN)
@@ -61,8 +70,8 @@ class Scene12(Scene):
                   FadeOut(part4),
                   FadeOut(part5),
                   FadeOut(eq),
-                  get_move_group_animation(part1, ORIGIN - part1.submobjects[-1].get_center()),
-                  get_move_group_animation(part6, ORIGIN - part6.submobjects[0].get_center())
+                  get_move_group_animation(part1, ORIGIN - part1.submobjects[-1].get_center() + DOWN * statement.get_height()/2),
+                  get_move_group_animation(part6, ORIGIN - part6.submobjects[0].get_center() + DOWN * statement.get_height()/2)
                   )
         self.play(ReplacementTransform(q_mark, tick))
         self.wait(2)

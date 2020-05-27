@@ -44,10 +44,10 @@ def my_title(text, **kwargs):
     return text_obj
 
 
-def get_move_group_animation(group, vector):
+def get_move_group_animation(group, vector, **kwargs):
     group_center = group.get_center()
     animation = MoveAlongPath(group, ParametricFunction(
-        lambda t: t * vector + group_center))
+        lambda t: t * vector + group_center), **kwargs)
 
     return animation
 
@@ -172,7 +172,8 @@ def inverse_dict(my_dict):
     return result_dict
 
 
-def move_brackets_animation(lbr_ind, rbr_ind, left_end, right_end, text_mobject):
+def move_brackets_animation(lbr_ind, rbr_ind, left_end, right_end, text_mobject: TextMobject,
+                            text_mobjects_scale_factor=1):
     text = text_mobject.submobjects
     indices_map = {}
     for i in range(len(text)):
@@ -192,7 +193,10 @@ def move_brackets_animation(lbr_ind, rbr_ind, left_end, right_end, text_mobject)
 
     new_text = [text[inverse_dict(indices_map)[i]].get_tex_string() for i in range(len(text))]
     new_text_mobject = TextMobject(*new_text, arg_separator='')
+
+    new_text_mobject.scale(text_mobjects_scale_factor)
     new_text_mobject.shift(text_mobject.get_left() - new_text_mobject.get_left())
+
     animations = [get_move_group_animation
                   (text[i], new_text_mobject.submobjects[indices_map[i]].get_center() - text[i].get_center())
                   for i in range(len(text))]

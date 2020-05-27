@@ -28,7 +28,7 @@ def make_ellipse(scene):
 
 class Scene7(SpecialThreeDScene):
     def construct(self):
-        self.set_camera_orientation(phi=PI/3)
+        self.set_camera_orientation(phi=PI*5/12)
         two_cubes = get_two_cubes()
         three_cubes = get_three_cubes()
         self.play(FadeIn(two_cubes))
@@ -36,13 +36,19 @@ class Scene7(SpecialThreeDScene):
         self.play(get_move_group_animation(two_cubes, RIGHT), get_move_group_animation(three_cubes, LEFT))
         make_ellipse(self)
         self.play(get_move_group_animation(two_cubes, LEFT), get_move_group_animation(three_cubes, RIGHT))
+        self.wait(1)
         self.move_camera(theta=PI/2, run_time=2)
+        self.wait(1)
         self.play(get_move_group_animation(two_cubes, RIGHT), get_move_group_animation(three_cubes, LEFT))
+        self.wait(3)
         make_ellipse(self)
+        self.wait(1)
+
+        # time passed 15
 
         def rotate_updater(mobject: Mobject, dt, rate=0.05):
             return mobject.rotate_in_place(rate * PI * dt, Z_AXIS)
 
         for cube in two_cubes.submobjects + three_cubes.submobjects:
             cube.add_updater(rotate_updater)
-        self.wait(3)
+        self.wait(13)

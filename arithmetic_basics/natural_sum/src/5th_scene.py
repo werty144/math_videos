@@ -85,7 +85,10 @@ class Scene5(SpecialThreeDScene):
         neq.scale(2)
         neq.center()
         self.play(FadeIn(neq))
-        self.wait(2)
+
+        # time passed 15
+
+        self.wait(9)
         group1_final_shift = ORIGIN - group1[1].get_center()
         group2_final_shift = ORIGIN - group2[1].get_center()
         right_side = Group(group1[0], group1[2], group1[3]).copy()
@@ -102,4 +105,4 @@ class Scene5(SpecialThreeDScene):
                   FadeOut(group1[1]),
                   FadeOut(group2[1])
                   )
-        self.wait(2)
+        self.wait(3)
