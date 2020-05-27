@@ -4,7 +4,6 @@ from src.functions import make_screen_frame
 
 class Intro(Scene):
     def construct(self):
-        make_screen_frame(self)
         infty = TextMobject('$\\infty$').scale(7)
         q = TextMobject('?').scale(7)
         self.play(FadeIn(infty))
