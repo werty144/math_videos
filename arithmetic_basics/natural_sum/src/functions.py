@@ -224,7 +224,7 @@ class My_bullet_list(Mobject):
     def __init__(self, n):
         Mobject.__init__(self)
         for _ in range(n):
-            dot = TexMobject("\\cdot").scale(2)
+            dot = TexMobject("\\cdot").scale(3)
             self.add(dot)
         dot_group = Group(*self.submobjects)
         dot_group.arrange(
@@ -235,3 +235,12 @@ class My_bullet_list(Mobject):
 
     def fade_in_dot_animation(self, dot_ind):
         return FadeIn(self.submobjects[dot_ind])
+
+
+def fade_out_all_animation(scene):
+    animations = []
+    for obj in scene.mobjects:
+        anim = FadeOut(obj)
+        animations.append(anim)
+    return animations
+

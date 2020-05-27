@@ -31,12 +31,19 @@ class Scene2(SpecialThreeDScene):
         three_cubes = get_three_cubes()
         two_cubes = get_two_cubes()
         Group(two_cubes, three_cubes).shift(DOWN * 2)
-        for cube in two_cubes.submobjects + three_cubes.submobjects:
-            cube.rotate(PI/6, Z_AXIS)
 
+        self.wait(2)
         self.play(FadeIn(two_cubes))
         self.play(FadeIn(three_cubes))
 
         move_three = get_move_group_animation(three_cubes, LEFT)
         move_two = get_move_group_animation(two_cubes, RIGHT)
         self.play(move_two, move_three)
+
+        def rotate_updater(mobject: Mobject, dt, rate=0.05):
+            return mobject.rotate_in_place(rate * PI * dt, Z_AXIS)
+
+        for cube in two_cubes.submobjects + three_cubes.submobjects:
+            cube.add_updater(rotate_updater)
+        self.wait(21)
+        self.play(*fade_out_all_animation(self))

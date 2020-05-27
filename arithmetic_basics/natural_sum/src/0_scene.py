@@ -9,12 +9,11 @@ def get_to_dot_vector(group, bullet_list, dot_ind):
 class Scene0(Scene):
     def construct(self):
         bullet_list = My_bullet_list(6)
-        bullet_list.align_on_border(UL)
-        bullet_list.shift(DOWN * 0.3)
+        bullet_list.set_color(ORANGE)
+        bullet_list.align_on_border(LEFT)
 
         peremena_mest = TextMobject('$x$', ' $+$ ', '$y$', ' $=$ ', '$x$', ' $+$ ', '$y$', arg_separator='')
         q1 = overscribe_text(peremena_mest.submobjects[3], '?')
-        peremena_mest.set_color_by_tex_to_color_map({'x': RED, 'y': BLUE})
 
         self.play(FadeIn(peremena_mest))
         self.play(*swap_variables_animation(4, 6, peremena_mest), run_time=1.5)
@@ -26,8 +25,8 @@ class Scene0(Scene):
 
         # time passed: 6.5
 
-        zero_division = TextMobject('$\\frac{1}{0}$ ', '\\xmark').scale(1.3)
-        zero_division.set_color_by_tex_to_color_map({'xmark': "#cc3333"})
+        zero_division = TextMobject('$\\frac{1}{0}$ ', '$\\times$').scale(1.3)
+        zero_division.submobjects[1].set_color("#ff0000")
         self.play(FadeIn(zero_division))
         self.wait(1.5)
         self.play(get_move_group_animation(zero_division, get_to_dot_vector(zero_division, bullet_list, 1)),
@@ -90,13 +89,11 @@ class Scene0(Scene):
 
         big_q_mark = TextMobject('?').scale(7)
         big_q_mark.shift(RIGHT * ((FRAME_X_RADIUS + irr_pow.get_right()[0]) / 2 - big_q_mark.get_center()[0]))
-        over_q_mark = overscribe_text(big_q_mark, '?')
 
         self.play(FadeIn(big_q_mark))
-        self.play(FadeIn(over_q_mark))
 
-        self.wait(28.5)
-        self.play(FadeOut(big_q_mark), FadeOut(over_q_mark))
+        self.wait(29.5)
+        self.play(FadeOut(big_q_mark))
         self.wait(0.5)
         quote = TextMobject('«Бог создал натуральные числа,\\\\ всё остальное – дело рук человека».\\\\')
         author = TextMobject('\\copyright \\space Л. Кронекер')

@@ -23,4 +23,4 @@ class Scene1(Scene):
                              'принято обозначать\\\\'
                              '~\\\\\n'
                              '{\\Huge $\\mathbb{N}$}')
-        self.wait(1)
+        self.play(*fade_out_all_animation(self))

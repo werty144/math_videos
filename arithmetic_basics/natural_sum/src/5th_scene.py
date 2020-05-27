@@ -54,7 +54,11 @@ def create_put_onto_equation(scene, type1, type2, type1_color, type2_color):
 
 class Scene5(SpecialThreeDScene):
     def construct(self):
+        self.wait(2)
         group1 = create_put_onto_equation(self, Cube, Pyramid, BLUE, GREEN)
+
+        # time passed 7
+
         group1_future_center = group1.get_center() + LEFT * ((group1.get_right() - ORIGIN)[0] + 1)
         self.wait(2)
         self.play(move_to_border_and_scale_animation(group1, UL, 0.5))
