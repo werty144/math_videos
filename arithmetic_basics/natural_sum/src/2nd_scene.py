@@ -46,4 +46,3 @@ class Scene2(SpecialThreeDScene):
         for cube in two_cubes.submobjects + three_cubes.submobjects:
             cube.add_updater(rotate_updater)
         self.wait(21)
-        self.play(*fade_out_all_animation(self))

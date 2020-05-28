@@ -19,7 +19,7 @@ class Scene4(Scene):
         equation = get_equation()
         self.add(equation)
         chain = TextMobject('$plus$', '(', '$x$', ',', ' ', '$y$', ')',
-                            ' $=$ ', '$x$', ' $+$ ', '$y$', ' $=$ ', '$y$', ' + ', '$x$', ' $=$ ',
+                            ' $=$ ', '$x$', ' $+$ ', '$y$', ' $=$ ', '$y$', ' $+$ ', '$x$', ' $=$ ',
                             '$plus$', '(', '$y$', ',', ' ', '$x$', ')',
                             arg_separator='')
         chain.set_color_by_tex_to_color_map({'x': RED, 'y': BLUE})

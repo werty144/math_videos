@@ -18,7 +18,7 @@ class Scene9(Scene):
         sum_n_sq_func.set_color_by_tex_to_color_map({'x': RED, 'y': BLUE, 'z': GREEN})
         sum_n_sq_func.scale(1.3)
         sum_n_sq_func.align_on_border(UP)
-        self.play(FadeIn(sum_n_sq_func))
+        self.play(FadeIn(sum_n_sq_func), get_move_group_animation(Group(assos, q_mark), DOWN * sum_n_sq_func.get_height()/2))
 
         # time passed 12
 
